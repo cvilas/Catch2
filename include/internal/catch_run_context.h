@@ -8,6 +8,7 @@
 #ifndef TWOBLUECUBES_CATCH_RUNNER_IMPL_HPP_INCLUDED
 #define TWOBLUECUBES_CATCH_RUNNER_IMPL_HPP_INCLUDED
 
+#include "catch_interfaces_generatortracker.h"
 #include "catch_interfaces_runner.h"
 #include "catch_interfaces_reporter.h"
 #include "catch_interfaces_exception.h"
@@ -79,6 +80,8 @@ namespace Catch {
         void sectionEnded( SectionEndInfo const& endInfo ) override;
         void sectionEndedEarly( SectionEndInfo const& endInfo ) override;
 
+        auto acquireGeneratorTracker( SourceLineInfo const& lineInfo ) -> IGeneratorTracker& override;
+
         void benchmarkStarting( BenchmarkInfo const& info ) override;
         void benchmarkEnded( BenchmarkStats const& stats ) override;
 
@@ -125,7 +128,7 @@ namespace Catch {
         TestRunInfo m_runInfo;
         IMutableContext& m_context;
         TestCase const* m_activeTestCase = nullptr;
-        ITracker* m_testCaseTracker;
+        ITracker* m_testCaseTracker = nullptr;
         Option<AssertionResult> m_lastResult;
 
         IConfigPtr m_config;

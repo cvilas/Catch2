@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuitesloose text artifact
 >
-  <testsuite name="<exe-name>" errors="17" failures="106" tests="1096" hostname="tbd" time="{duration}" timestamp="{iso8601-timestamp}">
+  <testsuite name="<exe-name>" errors="17" failures="113" tests="1340" hostname="tbd" time="{duration}" timestamp="{iso8601-timestamp}">
     <testcase classname="<exe-name>.global" name="# A test name that starts with a #" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="#1005: Comparing pointer to int and long (NULL can be either on various systems)" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="#1027" time="{duration}"/>
@@ -9,6 +9,7 @@
     <testcase classname="<exe-name>.global" name="#1175 - Hidden Test" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="#1238" time="{duration}"/>
     <testcase classname="<exe-name>.(Fixture_1245&lt;int, int>)" name="#1245" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="#1403" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="#748 - captures with unexpected exceptions/outside assertions" time="{duration}">
       <error type="TEST_CASE">
 expected exception
@@ -69,18 +70,65 @@ Condition.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="(unimplemented) static bools can be evaluated/negation" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="(unimplemented) static bools can be evaluated/double negation" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="(unimplemented) static bools can be evaluated/direct" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="10x10 ints" time="{duration}"/>
     <testcase classname="<exe-name>.TestClass" name="A METHOD_AS_TEST_CASE based test run that fails" time="{duration}">
       <failure message="&quot;hello&quot; == &quot;world&quot;" type="REQUIRE">
 Class.tests.cpp:<line number>
       </failure>
     </testcase>
     <testcase classname="<exe-name>.TestClass" name="A METHOD_AS_TEST_CASE based test run that succeeds" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that fails - 0" time="{duration}">
+      <failure message="0 == 1" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that fails - 1" time="{duration}">
+      <failure message="0 == 1" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that fails - 2" time="{duration}">
+      <failure message="0 == 1" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that fails - 3" time="{duration}">
+      <failure message="0 == 1" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that succeeds - 0" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that succeeds - 1" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that succeeds - 2" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture_2" name="A TEMPLATE_PRODUCT_TEST_CASE_METHOD based test run that succeeds - 3" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that fails - double" time="{duration}">
+      <failure message="1.0 == 2" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that fails - float" time="{duration}">
+      <failure message="1.0f == 2" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that fails - int" time="{duration}">
+      <failure message="1 == 2" type="REQUIRE">
+Class.tests.cpp:<line number>
+      </failure>
+    </testcase>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that succeeds - double" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that succeeds - float" time="{duration}"/>
+    <testcase classname="<exe-name>.Template_Fixture" name="A TEMPLATE_TEST_CASE_METHOD based test run that succeeds - int" time="{duration}"/>
     <testcase classname="<exe-name>.Fixture" name="A TEST_CASE_METHOD based test run that fails" time="{duration}">
       <failure message="1 == 2" type="REQUIRE">
 Class.tests.cpp:<line number>
       </failure>
     </testcase>
     <testcase classname="<exe-name>.Fixture" name="A TEST_CASE_METHOD based test run that succeeds" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="A Template product test case - 0" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="A Template product test case - 1" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="A Template product test case - 2" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="A Template product test case - 3" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="A comparison that uses literals instead of the normal constructor" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="A couple of nested sections followed by a failure" time="{duration}">
       <failure type="FAIL">
@@ -121,6 +169,8 @@ Exception.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="Assertions then sections/A section/Another other section" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Assorted miscellaneous tests" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Bitfields can be captured (#1027)" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="CAPTURE can deal with complex expressions" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="CAPTURE can deal with complex expressions involving commas" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Capture and info messages/Capture should stringify like assertions" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Capture and info messages/Info should NOT stringify the way assertions do" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Character pretty printing/Specifically escaped" time="{duration}"/>
@@ -289,6 +339,14 @@ Message.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="Floating point matchers: float/ULPs" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Floating point matchers: float/Composed" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Floating point matchers: float/Constructor validation" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators/one" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators/two" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/range" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/fixed values" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/combined" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/values" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/values2" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Generators impl/type erasure" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Greater-than inequalities with different epsilons" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="INFO and WARN do not abort tests" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="INFO gets logged on failure" time="{duration}">
@@ -365,6 +423,7 @@ Exception.tests.cpp:<line number>
       </error>
     </testcase>
     <testcase classname="<exe-name>.global" name="Objects that evaluated in boolean contexts can be checked" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Optionally static assertions" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Ordering comparison checks that should fail" time="{duration}">
       <failure message="7 > 7" type="CHECK">
 Condition.tests.cpp:<line number>
@@ -469,6 +528,7 @@ Message.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="Parse test names and tags/empty quoted name" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Parse test names and tags/quoted string followed by tag exclusion" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Pointers can be compared to null" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Predicate matcher can accept const char*" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/empty args don't cause a crash" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/default - no arguments" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/test lists/Specify one test case using" time="{duration}"/>
@@ -478,6 +538,7 @@ Message.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/reporter/-r/xml" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/reporter/--reporter/junit" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/reporter/Only one reporter is accepted" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Process can be configured on command line/reporter/must match one of the available ones" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/debugger/-b" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/debugger/--break" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/abort/-a aborts after first failure" time="{duration}"/>
@@ -493,6 +554,9 @@ Message.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/use-colour/yes" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/use-colour/no" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Process can be configured on command line/use-colour/error" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Product with differing arities - 0" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Product with differing arities - 1" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Product with differing arities - 2" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Reconstruction should be based on stringification: #914" time="{duration}">
       <failure message="Hey, its truthy!" type="CHECK">
 Decomposition.tests.cpp:<line number>
@@ -509,12 +573,13 @@ Matchers.tests.cpp:<line number>
 Matchers.tests.cpp:<line number>
       </failure>
     </testcase>
+    <testcase classname="<exe-name>.global" name="Regression test #1" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="SUCCEED counts as a test pass" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="SUCCEED does not require an argument" time="{duration}"/>
     <testcase classname="<exe-name>.Fixture" name="Scenario: BDD tests requiring Fixtures to provide commonly-accessed data or methods/Given: No operations precede me" time="{duration}"/>
     <testcase classname="<exe-name>.Fixture" name="Scenario: BDD tests requiring Fixtures to provide commonly-accessed data or methods/Given: No operations precede me/When: We get the count/Then: Subsequently values are higher" time="{duration}"/>
-    <testcase classname="<exe-name>.global" name="Scenario: Do that thing with the thing/Given: This stuff exists/When: I do this/Then: it should do this" time="{duration}"/>
-    <testcase classname="<exe-name>.global" name="Scenario: Do that thing with the thing/Given: This stuff exists/When: I do this/Then: it should do this/And: do that" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Scenario: Do that thing with the thing/Given: This stuff exists/And given: And some assumption/When: I do this/Then: it should do this" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="Scenario: Do that thing with the thing/Given: This stuff exists/And given: And some assumption/When: I do this/Then: it should do this/And: do that" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Scenario: This is a really long scenario name to see how the list command deals with wrapping/Given: A section name that is so long that it cannot fit in a single console width/When: The test headers are printed as part of the normal running of the scenario/Then: The, deliberately very long and overly verbose (you see what I did there?) section names must wrap, along with an indent" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Scenario: Vector resizing affects size and capacity/Given: an empty vector" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Scenario: Vector resizing affects size and capacity/Given: an empty vector/When: it is made larger/Then: the size and capacity go up" time="{duration}"/>
@@ -582,6 +647,30 @@ Misc.tests.cpp:<line number>
     </testcase>
     <testcase classname="<exe-name>.global" name="Tag alias can be registered against tag patterns/The same tag alias can only be registered once" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Tag alias can be registered against tag patterns/Tag aliases must be of the form [@name]" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float/resizing bigger changes size and capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float/resizing smaller changes size but not capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float/resizing smaller changes size but not capacity/We can use the 'swap trick' to reset the capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float/reserving bigger changes capacity but not size" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - float/reserving smaller does not change size or capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int/resizing bigger changes size and capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int/resizing smaller changes size but not capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int/resizing smaller changes size but not capacity/We can use the 'swap trick' to reset the capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int/reserving bigger changes capacity but not size" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - int/reserving smaller does not change size or capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string/resizing bigger changes size and capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string/resizing smaller changes size but not capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string/resizing smaller changes size but not capacity/We can use the 'swap trick' to reset the capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string/reserving bigger changes capacity but not size" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::string/reserving smaller does not change size or capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>/resizing bigger changes size and capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>/resizing smaller changes size but not capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>/resizing smaller changes size but not capacity/We can use the 'swap trick' to reset the capacity" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>/reserving bigger changes capacity but not size" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="TemplateTest: vectors can be sized and resized - std::tuple&lt;int,float>/reserving smaller does not change size or capacity" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Test case with one argument" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="Test enum bit values" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="The NO_FAIL macro reports a failure but does not fail the test" time="{duration}"/>
@@ -855,6 +944,7 @@ Tricky.tests.cpp:<line number>
     <testcase classname="<exe-name>.global" name="stringify( vectors&lt;has_maker> )" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="stringify( vectors&lt;has_maker_and_operator> )" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="stringify( vectors&lt;has_operator> )" time="{duration}"/>
+    <testcase classname="<exe-name>.global" name="strlen3" time="{duration}"/>
     <testcase classname="<exe-name>.global" name="thrown std::strings are translated" time="{duration}">
       <error type="TEST_CASE">
 Why would you throw a std::string?

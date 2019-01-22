@@ -7,6 +7,7 @@
  */
 
 #include "catch_approx.h"
+#include "catch_enforce.h"
 
 #include <cmath>
 #include <limits>
@@ -52,6 +53,20 @@ namespace Detail {
         // First try with fixed margin, then compute margin based on epsilon, scale and Approx's value
         // Thanks to Richard Harris for his help refining the scaled margin value
         return marginComparison(m_value, other, m_margin) || marginComparison(m_value, other, m_epsilon * (m_scale + std::fabs(m_value)));
+    }
+
+    void Approx::setMargin(double margin) {
+        CATCH_ENFORCE(margin >= 0,
+            "Invalid Approx::margin: " << margin << '.'
+            << " Approx::Margin has to be non-negative.");
+        m_margin = margin;
+    }
+
+    void Approx::setEpsilon(double epsilon) {
+        CATCH_ENFORCE(epsilon >= 0 && epsilon <= 1.0,
+            "Invalid Approx::epsilon: " << epsilon << '.'
+            << " Approx::epsilon has to be in [0, 1]");
+        m_epsilon = epsilon;
     }
 
 } // end namespace Detail

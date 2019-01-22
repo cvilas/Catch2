@@ -6,13 +6,14 @@
  */
 
 #include "catch_matchers_floating.h"
+#include "catch_enforce.h"
+#include "catch_polyfills.hpp"
 #include "catch_to_string.hpp"
 #include "catch_tostring.h"
 
 #include <cstdlib>
 #include <cstdint>
 #include <cstring>
-#include <stdexcept>
 
 namespace Catch {
 namespace Matchers {
@@ -57,7 +58,7 @@ template <typename FP>
 bool almostEqualUlps(FP lhs, FP rhs, int maxUlpDiff) {
     // Comparison with NaN should always be false.
     // This way we can rule it out before getting into the ugly details
-    if (std::isnan(lhs) || std::isnan(rhs)) {
+    if (Catch::isnan(lhs) || Catch::isnan(rhs)) {
         return false;
     }
 
@@ -81,9 +82,8 @@ namespace Matchers {
 namespace Floating {
     WithinAbsMatcher::WithinAbsMatcher(double target, double margin)
         :m_target{ target }, m_margin{ margin } {
-        if (m_margin < 0) {
-            throw std::domain_error("Allowed margin difference has to be >= 0");
-        }
+        CATCH_ENFORCE(margin >= 0, "Invalid margin: " << margin << '.'
+            << " Margin has to be non-negative.");
     }
 
     // Performs equivalent check of std::fabs(lhs - rhs) <= margin
@@ -99,10 +99,15 @@ namespace Floating {
 
     WithinUlpsMatcher::WithinUlpsMatcher(double target, int ulps, FloatingPointKind baseType)
         :m_target{ target }, m_ulps{ ulps }, m_type{ baseType } {
-        if (m_ulps < 0) {
-            throw std::domain_error("Allowed ulp difference has to be >= 0");
-        }
+        CATCH_ENFORCE(ulps >= 0, "Invalid ULP setting: " << ulps << '.'
+            << " ULPs have to be non-negative.");
     }
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+// Clang <3.5 reports on the default branch in the switch below
+#pragma clang diagnostic ignored "-Wunreachable-code"
+#endif
 
     bool WithinUlpsMatcher::match(double const& matchee) const {
         switch (m_type) {
@@ -111,9 +116,13 @@ namespace Floating {
         case FloatingPointKind::Double:
             return almostEqualUlps<double>(matchee, m_target, m_ulps);
         default:
-            throw std::domain_error("Unknown FloatingPointKind value");
+            CATCH_INTERNAL_ERROR( "Unknown FloatingPointKind value" );
         }
     }
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
     std::string WithinUlpsMatcher::describe() const {
         return "is within " + Catch::to_string(m_ulps) + " ULPs of " + ::Catch::Detail::stringify(m_target) + ((m_type == FloatingPointKind::Float)? "f" : "");

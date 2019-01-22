@@ -3,15 +3,19 @@
 
 **Contents**<br>
 [main()/ implementation](#main-implementation)<br>
+[Reporter / Listener interfaces](#reporter--listener-interfaces)<br>
 [Prefixing Catch macros](#prefixing-catch-macros)<br>
 [Terminal colour](#terminal-colour)<br>
 [Console width](#console-width)<br>
 [stdout](#stdout)<br>
 [Fallback stringifier](#fallback-stringifier)<br>
 [Default reporter](#default-reporter)<br>
+[C++11 toggles](#c11-toggles)<br>
+[C++17 toggles](#c17-toggles)<br>
 [Other toggles](#other-toggles)<br>
 [Windows header clutter](#windows-header-clutter)<br>
 [Enabling stringification](#enabling-stringification)<br>
+[Disabling exceptions](#disabling-exceptions)<br>
 
 Catch is designed to "just work" as much as possible. For most people the only configuration needed is telling Catch which source file should host all the implementation code (```CATCH_CONFIG_MAIN```).
 
@@ -19,12 +23,12 @@ Nonetheless there are still some occasions where finer control is needed. For th
 
 ## main()/ implementation
 
-	CATCH_CONFIG_MAIN	// Designates this as implementation file and defines main()
-	CATCH_CONFIG_RUNNER	// Designates this as implementation file
+    CATCH_CONFIG_MAIN      // Designates this as implementation file and defines main()
+    CATCH_CONFIG_RUNNER    // Designates this as implementation file
 
 Although Catch is header only it still, internally, maintains a distinction between interface headers and headers that contain implementation. Only one source file in your test project should compile the implementation headers and this is controlled through the use of one of these macros - one of these identifiers should be defined before including Catch in *exactly one implementation file in your project*.
 
-# Reporter / Listener interfaces
+## Reporter / Listener interfaces
 
     CATCH_CONFIG_EXTERNAL_INTERFACES  // Brings in necessary headers for Reporter/Listener implementation
 
@@ -34,16 +38,16 @@ Implied by both `CATCH_CONFIG_MAIN` and `CATCH_CONFIG_RUNNER`.
 
 ## Prefixing Catch macros
 
-	CATCH_CONFIG_PREFIX_ALL
+    CATCH_CONFIG_PREFIX_ALL
 
 To keep test code clean and uncluttered Catch uses short macro names (e.g. ```TEST_CASE``` and ```REQUIRE```). Occasionally these may conflict with identifiers from platform headers or the system under test. In this case the above identifier can be defined. This will cause all the Catch user macros to be prefixed with ```CATCH_``` (e.g. ```CATCH_TEST_CASE``` and ```CATCH_REQUIRE```).
 
 
 ## Terminal colour
 
-	CATCH_CONFIG_COLOUR_NONE	// completely disables all text colouring
-	CATCH_CONFIG_COLOUR_WINDOWS	// forces the Win32 console API to be used
-	CATCH_CONFIG_COLOUR_ANSI	// forces ANSI colour codes to be used
+    CATCH_CONFIG_COLOUR_NONE      // completely disables all text colouring
+    CATCH_CONFIG_COLOUR_WINDOWS   // forces the Win32 console API to be used
+    CATCH_CONFIG_COLOUR_ANSI      // forces ANSI colour codes to be used
 
 Yes, I am English, so I will continue to spell "colour" with a 'u'.
 
@@ -57,14 +61,14 @@ Typically you should place the ```#define``` before #including "catch.hpp" in yo
 
 ## Console width
 
-	CATCH_CONFIG_CONSOLE_WIDTH = x // where x is a number
+    CATCH_CONFIG_CONSOLE_WIDTH = x // where x is a number
 
 Catch formats output intended for the console to fit within a fixed number of characters. This is especially important as indentation is used extensively and uncontrolled line wraps break this.
 By default a console width of 80 is assumed but this can be controlled by defining the above identifier to be a different value.
 
 ## stdout
 
-	CATCH_CONFIG_NOSTDOUT
+    CATCH_CONFIG_NOSTDOUT
 
 To support platforms that do not provide `std::cout`, `std::cerr` and
 `std::clog`, Catch does not usem the directly, but rather calls
@@ -123,6 +127,8 @@ Catch's selection, by defining either `CATCH_CONFIG_CPP11_TO_STRING` or
 ## C++17 toggles
 
     CATCH_CONFIG_CPP17_UNCAUGHT_EXCEPTIONS  // Use std::uncaught_exceptions instead of std::uncaught_exception
+    CATCH_CONFIG_CPP17_STRING_VIEW          // Provide StringMaker specialization for std::string_view
+    CATCH_CONFIG_CPP17_VARIANT              // Override C++17 detection for CATCH_CONFIG_ENABLE_VARIANT_STRINGMAKER
 
 Catch contains basic compiler/standard detection and attempts to use
 some C++17 features whenever appropriate. This automatic detection
@@ -197,8 +203,43 @@ By default, Catch does not stringify some types from the standard library. This 
     CATCH_CONFIG_ENABLE_PAIR_STRINGMAKER    // Provide StringMaker specialization for std::pair
     CATCH_CONFIG_ENABLE_TUPLE_STRINGMAKER   // Provide StringMaker specialization for std::tuple
     CATCH_CONFIG_ENABLE_CHRONO_STRINGMAKER  // Provide StringMaker specialization for std::chrono::duration, std::chrono::timepoint
+    CATCH_CONFIG_ENABLE_VARIANT_STRINGMAKER // Provide StringMaker specialization for std::variant, std::monostate (on C++17)
     CATCH_CONFIG_ENABLE_ALL_STRINGMAKERS    // Defines all of the above
 
+
+## Disabling exceptions
+
+By default, Catch2 uses exceptions to signal errors and to abort tests
+when an assertion from the `REQUIRE` family of assertions fails. We also
+provide an experimental support for disabling exceptions. Catch2 should
+automatically detect when it is compiled with exceptions disabled, but
+it can be forced to compile without exceptions by defining
+
+    CATCH_CONFIG_DISABLE_EXCEPTIONS
+
+Note that when using Catch2 without exceptions, there are 2 major
+limitations:
+
+1) If there is an error that would normally be signalled by an exception,
+the exception's message will instead be written to `Catch::cerr` and
+`std::terminate` will be called.
+2) If an assertion from the `REQUIRE` family of macros fails,
+`std::terminate` will be called after the active reporter returns.
+
+
+There is also a customization point for the exact behaviour of what
+happens instead of exception being thrown. To use it, define
+
+    CATCH_CONFIG_DISABLE_EXCEPTIONS_CUSTOM_HANDLER
+
+and provide a definition for this function:
+
+```cpp
+namespace Catch {
+    [[noreturn]]
+    void throw_exception(std::exception const&);
+}
+```
 
 ---
 

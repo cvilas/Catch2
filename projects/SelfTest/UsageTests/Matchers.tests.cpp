@@ -423,6 +423,19 @@ namespace { namespace MatchersTests {
             }
         }
 
+        TEST_CASE("Regression test #1", "[matchers][vector]") {
+            // At some point, UnorderedEqualsMatcher skipped
+            // mismatched prefixed before doing the comparison itself
+            std::vector<char> actual = { 'a', 'b' };
+            std::vector<char> expected = { 'c', 'b' };
+
+            CHECK_THAT(actual, !UnorderedEquals(expected));
+        }
+
+        TEST_CASE("Predicate matcher can accept const char*", "[matchers][compilation]") {
+            REQUIRE_THAT("foo", Predicate<const char*>([] (const char* const&) { return true; }));
+        }
+
 } } // namespace MatchersTests
 
 #endif // CATCH_CONFIG_DISABLE_MATCHERS

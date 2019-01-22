@@ -1,4 +1,5 @@
 #include "catch_run_context.h"
+#include "catch_compiler_capabilities.h"
 #include "catch_context.h"
 #include "catch_enforce.h"
 #include "catch_random_number_generator.h"
@@ -10,6 +11,70 @@
 #include <sstream>
 
 namespace Catch {
+
+    namespace Generators {
+        struct GeneratorTracker : TestCaseTracking::TrackerBase, IGeneratorTracker {
+            size_t m_index = static_cast<size_t>( -1 );
+            GeneratorBasePtr m_generator;
+
+            GeneratorTracker( TestCaseTracking::NameAndLocation const& nameAndLocation, TrackerContext& ctx, ITracker* parent )
+            :   TrackerBase( nameAndLocation, ctx, parent )
+            {}
+            ~GeneratorTracker();
+
+            static GeneratorTracker& acquire( TrackerContext& ctx, TestCaseTracking::NameAndLocation const& nameAndLocation ) {
+                std::shared_ptr<GeneratorTracker> tracker;
+
+                ITracker& currentTracker = ctx.currentTracker();
+                if( TestCaseTracking::ITrackerPtr childTracker = currentTracker.findChild( nameAndLocation ) ) {
+                    assert( childTracker );
+                    assert( childTracker->isIndexTracker() );
+                    tracker = std::static_pointer_cast<GeneratorTracker>( childTracker );
+                }
+                else {
+                    tracker = std::make_shared<GeneratorTracker>( nameAndLocation, ctx, &currentTracker );
+                    currentTracker.addChild( tracker );
+                }
+
+                if( !ctx.completedCycle() && !tracker->isComplete() ) {
+                    if( tracker->m_runState != ExecutingChildren && tracker->m_runState != NeedsAnotherRun )
+                        tracker->moveNext();
+                    tracker->open();
+                }
+
+                return *tracker;
+            }
+
+            void moveNext() {
+                m_index++;
+                m_children.clear();
+            }
+
+            // TrackerBase interface
+            bool isIndexTracker() const override { return true; }
+            auto hasGenerator() const -> bool override {
+                return !!m_generator;
+            }
+            void close() override {
+                TrackerBase::close();
+                if( m_runState == CompletedSuccessfully && m_index < m_generator->size()-1 )
+                    m_runState = Executing;
+            }
+
+            // IGeneratorTracker interface
+            auto getGenerator() const -> GeneratorBasePtr const& override {
+                return m_generator;
+            }
+            void setGenerator( GeneratorBasePtr&& generator ) override {
+                m_generator = std::move( generator );
+            }
+            auto getIndex() const -> size_t override {
+                return m_index;
+            }
+        };
+        GeneratorTracker::~GeneratorTracker() {}
+    }
+
 
     RunContext::RunContext(IConfigPtr const& _config, IStreamingReporterPtr&& reporter)
     :   m_runInfo(_config->name()),
@@ -128,6 +193,13 @@ namespace Catch {
 
         return true;
     }
+    auto RunContext::acquireGeneratorTracker( SourceLineInfo const& lineInfo ) -> IGeneratorTracker& {
+        using namespace Generators;
+        GeneratorTracker& tracker = GeneratorTracker::acquire( m_trackerContext, TestCaseTracking::NameAndLocation( "generator", lineInfo ) );
+        assert( tracker.isOpen() );
+        m_lastAssertionInfo.lineInfo = lineInfo;
+        return tracker;
+    }
 
     bool RunContext::testForMissingAssertions(Counts& assertions) {
         if (assertions.total() != 0)
@@ -241,7 +313,7 @@ namespace Catch {
     }
 
     bool RunContext::aborting() const {
-        return m_totals.assertions.failed == static_cast<std::size_t>(m_config->abortAfter());
+        return m_totals.assertions.failed >= static_cast<std::size_t>(m_config->abortAfter());
     }
 
     void RunContext::runCurrentTest(std::string & redirectedCout, std::string & redirectedCerr) {
@@ -256,7 +328,7 @@ namespace Catch {
         seedRng(*m_config);
 
         Timer timer;
-        try {
+        CATCH_TRY {
             if (m_reporter->getPreferences().shouldRedirectStdOut) {
 #if !defined(CATCH_CONFIG_EXPERIMENTAL_REDIRECT)
                 RedirectedStdOut redirectedStdOut;
@@ -276,9 +348,9 @@ namespace Catch {
                 invokeActiveTestCase();
             }
             duration = timer.getElapsedSeconds();
-        } catch (TestFailureException&) {
+        } CATCH_CATCH_ANON (TestFailureException&) {
             // This just means the test was aborted due to failure
-        } catch (...) {
+        } CATCH_CATCH_ALL {
             // Under CATCH_CONFIG_FAST_COMPILE, unexpected exceptions under REQUIRE assertions
             // are reported without translation at the point of origin.
             if( m_shouldReportUnexpected ) {
