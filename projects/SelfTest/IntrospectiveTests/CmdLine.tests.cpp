@@ -262,7 +262,24 @@ TEST_CASE( "Parse test names and tags" ) {
         CHECK( spec.matches( tcC ) == false );
         CHECK( spec.matches( tcD ) == true );
     }
+    SECTION( "Leading and trailing spaces in test spec" ) {
+        TestSpec spec = parseTestSpec( "\"  aardvark \"" );
+        CHECK( spec.matches( fakeTestCase( "  aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "  aardvark" ) ) );
+        CHECK( spec.matches( fakeTestCase( " aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "aardvark" ) ) );
 
+    }
+    SECTION( "Leading and trailing spaces in test name" ) {
+        TestSpec spec = parseTestSpec( "aardvark" );
+        CHECK( spec.matches( fakeTestCase( "  aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "  aardvark" ) ) );
+        CHECK( spec.matches( fakeTestCase( " aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "aardvark " ) ) );
+        CHECK( spec.matches( fakeTestCase( "aardvark" ) ) );
+
+    }
 }
 
 TEST_CASE( "Process can be configured on command line", "[config][command-line]" ) {
@@ -462,4 +479,35 @@ TEST_CASE( "Process can be configured on command line", "[config][command-line]"
 #endif
         }
     }
+
+    SECTION("Benchmark options") {
+        SECTION("samples") {
+            CHECK(cli.parse({ "test", "--benchmark-samples=200" }));
+
+            REQUIRE(config.benchmarkSamples == 200);
+        }
+        
+        SECTION("resamples") {
+            CHECK(cli.parse({ "test", "--benchmark-resamples=20000" }));
+
+            REQUIRE(config.benchmarkResamples == 20000);
+        }
+
+        SECTION("resamples") {
+            CHECK(cli.parse({ "test", "--benchmark-confidence-interval=0.99" }));
+
+            REQUIRE(config.benchmarkConfidenceInterval == Catch::Detail::Approx(0.99));
+        }
+
+        SECTION("resamples") {
+            CHECK(cli.parse({ "test", "--benchmark-no-analysis" }));
+
+            REQUIRE(config.benchmarkNoAnalysis);
+        }
+    }
+}
+
+TEST_CASE("Test with special, characters \"in name", "[cli][regression]") {
+    // This test case succeeds if we can invoke it from the CLI
+    SUCCEED();
 }
